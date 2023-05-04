@@ -1,20 +1,14 @@
-/*
- Controlling a servo position using a potentiometer (variable resistor)
- by Michal Rinott <http://people.interaction-ivrea.it/m.rinott>
-
- modified on 8 Nov 2013
- by Scott Fitzgerald
- http://www.arduino.cc/en/Tutorial/Knob
-*/
-
 #include <Servo.h>
+#include <HCSR04.h>
 
+HCSR04 hc(5, 6); //initialisation class HCSR04 (trig pin , echo pin)
 Servo myservo;  // create servo object to control a servo
 
 int potpin = A0;  // analog pin used to connect the potentiometer
 int val, val1;    // variable to read the value from the analog pin
 unsigned long timer, timer2;
 bool m1, m2;
+long distancia;
 
 void setup() {
   myservo.attach(3);  // attaches the servo on pin 9 to the servo object
@@ -22,8 +16,9 @@ void setup() {
 }
 
 void loop() {
-  Serial.println(millis()-timer);
-  if(analogRead(potpin) > 1000){
+  distancia = hc.dist();
+//  Serial.println(distancia);
+  if(distancia < 10 && distancia!=0){
     if(millis()-timer > 100){
       timer2 = millis();
       if(m2){
@@ -40,9 +35,9 @@ void loop() {
 
   if(m1){
     myservo.write(180);
-//    Serial.println("aberto"); 
+   Serial.println("aberto"); 
   }else{
-//    Serial.println("fechado");
+    Serial.println("fechado");
     myservo.write(0); 
   }
 }
