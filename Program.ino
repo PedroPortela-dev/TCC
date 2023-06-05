@@ -1,24 +1,26 @@
 #include <Servo.h>
 #include <HCSR04.h>
 
-HCSR04 hc(5, 6); //initialisation class HCSR04 (trig pin , echo pin)
+HCSR04 hc1(5, 6); //initialisation class HCSR04 (trig pin , echo pin)
+HCSR04 hc(7, 8); //initialisation class HCSR04 (trig pin , echo pin)
 Servo myservo;  // create servo object to control a servo
+Servo myservo1;  // create servo object to control a servo
 
-int potpin = A0;  // analog pin used to connect the potentiometer
-int val, val1;    // variable to read the value from the analog pin
-unsigned long timer, timer2;
-bool m1, m2;
-long distancia;
+unsigned long timer, timer2, timer3, timer4;
+bool m1, m2, m3, m4;
+long distancia, distancia1;
 
 void setup() {
   myservo.attach(3);  // attaches the servo on pin 9 to the servo object
+  myservo1.attach(9);
   Serial.begin(9600);
 }
 
 void loop() {
   distancia = hc.dist();
-//  Serial.println(distancia);
-  if(distancia < 10 && distancia!=0){
+  distancia1 = hc1.dist();
+  Serial.print(distancia);
+  if(distancia < 30 && distancia!=0){
     if(millis()-timer > 100){
       timer2 = millis();
       if(m2){
@@ -33,11 +35,36 @@ void loop() {
     }
   }
 
+  if(distancia1 < 30 && distancia1!=0){
+    if(millis()-timer3 > 100){
+      timer4 = millis();
+      if(m4){
+        m3 = !m3;
+        m4 = false;
+      }
+    }
+  }else{
+    if(millis()-timer4 > 100){
+      m4 = true;
+      timer3 = millis();
+    }
+  }
+
   if(m1){
-    myservo.write(180);
+    myservo.write(100);
+   Serial.print("aberto  ||   "); 
+  }else{
+    Serial.print("fechado  ||  ");
+    myservo.write(0); 
+  }
+
+  
+  if(m1 || m3){
+    myservo1.write(100);
    Serial.println("aberto"); 
   }else{
     Serial.println("fechado");
-    myservo.write(0); 
+    myservo1.write(0); 
   }
+  
 }
