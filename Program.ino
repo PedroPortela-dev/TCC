@@ -1,10 +1,10 @@
-#include <Servo.h>
+#include <VarSpeedServo.h>
 #include <HCSR04.h>
 
 HCSR04 hc1(5, 6); //initialisation class HCSR04 (trig pin , echo pin)
 HCSR04 hc(7, 8); //initialisation class HCSR04 (trig pin , echo pin)
-Servo myservo;  // create servo object to control a servo
-Servo myservo1;  // create servo object to control a servo
+VarSpeedServo myservo;  // create servo object to control a servo
+VarSpeedServo myservo1;  // create servo object to control a servo
 
 unsigned long timer, timer2, timer3, timer4;
 bool m1, m2, m3, m4;
@@ -55,16 +55,16 @@ void loop() {
    Serial.print("aberto  ||   "); 
   }else{
     Serial.print("fechado  ||  ");
-    myservo.write(0); 
+    myservo.slowmove(0,30); 
   }
 
   
   if(m1 || m3){
-    myservo1.write(100);
+    myservo1.write(0);
    Serial.println("aberto"); 
   }else{
     Serial.println("fechado");
-    myservo1.write(0); 
+    myservo1.slowmove(100,30); 
   }
   
 }
