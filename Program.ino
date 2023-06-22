@@ -1,5 +1,4 @@
 #include <VarSpeedServo.h>
-#include <HCSR04.h> 
 #include <EasyUltrasonic.h>
 
 EasyUltrasonic hc;// Create the ultrasonic object
