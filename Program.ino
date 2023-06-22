@@ -1,8 +1,9 @@
 #include <VarSpeedServo.h>
-#include <HCSR04.h>
+#include <HCSR04.h> 
+#include <EasyUltrasonic.h>
 
-HCSR04 hc1(5, 6); //initialisation class HCSR04 (trig pin , echo pin)
-HCSR04 hc(7, 8); //initialisation class HCSR04 (trig pin , echo pin)
+EasyUltrasonic hc;// Create the ultrasonic object
+EasyUltrasonic hc1;// Create the ultrasonic object
 VarSpeedServo myservo;  // create servo object to control a servo
 VarSpeedServo myservo1;  // create servo object to control a servo
 
@@ -13,13 +14,18 @@ long distancia, distancia1;
 void setup() {
   myservo.attach(3);  // attaches the servo on pin 9 to the servo object
   myservo1.attach(9);
+  hc.attach(7, 8);
+  hc1.attach(5, 5, 3, 300);
   Serial.begin(9600);
 }
 
 void loop() {
-  distancia = hc.dist();
-  distancia1 = hc1.dist();
+  distancia = hc.getDistanceCM();
+  distancia1 = hc1.getDistanceCM();
   Serial.print(distancia);
+  Serial.print(" || ");
+  Serial.print(distancia1);
+  Serial.print(" || ");
   if(distancia < 30 && distancia!=0){
     if(millis()-timer > 100){
       timer2 = millis();
